@@ -1,49 +1,7 @@
-// Create a Car class with some attributes
-typedef struct // definition of a new type, which is a structure
-{              // contains
-  int player;
-  char *colour;
-  int year;
-} Piece; // Name of structure
 
 // global variables for player pieces
 int playerpiece1 = 81; // Q
 int playerpiece2 = 88; // X
-
-void printBoard(Piece[][] GBoard) // prints board onto console
-{
-  for (int i = 0; i < length(GBoard); i++)
-  {
-    for (int j = 0; j < length(GBoard[0]); j++)
-    {
-      if (GBoard[i][j] == 0)
-      {
-        continue;
-      }
-      else if (GBoard[i][j] == 1)
-      {
-        printf("%c", playerpiece1);
-      }
-      else if (GBoard[i][j] == 2)
-      {
-        printf("%c", playerpiece2);
-      }
-    }
-    printf("\n------------------------------------------------\n"); // prints new line, filled with dashes
-  }
-}
-
-void clearBoard(Piece[][] GBoard) // creates the board and fills it with empty objects
-{
-  for (int i = 0; i < length(GBoard); i++)
-  {
-    for (int j = 0; j < length(GBoard[0]); j++)
-    {
-      GBoard[i][j] = 0;
-    }
-    printf("\n------------------------------------------------\n"); // prints new line, filled with dashes
-  }
-}
 
 int main()
 { // size of board

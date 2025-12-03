@@ -1,3 +1,5 @@
+// THIS FILE IS PROPERTY OF ME, DO NOT!!!!! TOUCH
+
 // Create a Car class with some attributes
 typedef struct // definition of a new type, which is a structure
 {              // contains

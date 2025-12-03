@@ -16,18 +16,30 @@ void printBoard(Piece[][] GBoard) // prints board onto console
   {
     for (int j = 0; j < length(GBoard[0]); j++)
     {
-      prjnt(GBoard[i][j]); // prints the respective piece
+      if (GBoard[i][j] == 0)
+      {
+        continue;
+      }
+      else if (GBoard[i][j] == 1)
+      {
+        printf("%c", playerpiece1);
+      }
+      else if (GBoard[i][j] == 2)
+      {
+        printf("%c", playerpiece2);
+      }
     }
     printf("\n------------------------------------------------\n"); // prints new line, filled with dashes
   }
 }
 
-void makeBoard(Piece[][] GBoard) // creates the board and fills it with empty objects
+void clearBoard(Piece[][] GBoard) // creates the board and fills it with empty objects
 {
   for (int i = 0; i < length(GBoard); i++)
   {
     for (int j = 0; j < length(GBoard[0]); j++)
     {
+      GBoard[i][j] = 0;
     }
     printf("\n------------------------------------------------\n"); // prints new line, filled with dashes
   }
@@ -41,7 +53,7 @@ int main()
 
   // Create game board
   Piece GBoard[boredsizex][boredsizey];
-  makeBoard(*GBoard); // fills the board with empty game pieces
+  clearBoard(*GBoard); // fills the board with empty game pieces
 
   while (1) // while true
   {

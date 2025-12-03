@@ -29,7 +29,7 @@ void printBoard(int[][] GBoard, char piece1, char piece2) // prints board onto c
       {
         printf("%c", piece2);
       }
-      printf("|");
+      printf("|"); // divider between pieces for the full table
     }
     printf("\n------------------------------------------------\n"); // prints new line, filled with dashes
   }

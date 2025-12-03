@@ -1,13 +1,14 @@
 eine header: Funktiondeklarationen
-    - board erstellen (nxm) 
+    - board erstellen (n*m)
+    -- array, das im Hintergrund einsen und zweien speichert (je nachdem, ob Stein von User1 oder User2 da liegt). Null für freies Feld
     - board print (ausgabe des Boards)
     - board full/ draw
     - check Win
     - Spalteneingabe mit Zahlen (fürs erste)
     - manage Players
 
-einne cdatei: Funktionen schreiben
-    1 c-Datei:
+eine C-Datei: Funktionen schreiben
+    1 C-Datei:
     
 eine cdatei: play Game
 

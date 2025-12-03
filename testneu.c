@@ -7,6 +7,7 @@ Datei hochladen: im Terminal
 git status (hier sind alle Dateien zu sehen, die untracked sind)
 git add dateiname.c
 git commit
+bzw. git commit -m ""
 git push
 */
 

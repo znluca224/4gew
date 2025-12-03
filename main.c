@@ -1,10 +1,8 @@
 #include "header.h"
-// global variables for player pieces
-int playerpiece1 = 81; // Q
-int playerpiece2 = 88; // X
 
 int main()
-{ // size of board
+{
+    // size of board
     int boredsizey = 6;
     int boredsizex = 7;
     int maxplays = boredsizex * boredsizey; // maximum number of pieces on board

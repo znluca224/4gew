@@ -10,7 +10,7 @@ int main()
   int maxplays = boredsizex * boredsizey; // maximum number of pieces on board
 
   // Create game board
-  Piece GBoard[boredsizex][boredsizey];
+  int GBoard[boredsizex][boredsizey];
   clearBoard(*GBoard); // fills the board with empty game pieces
 
   while (1) // while true
@@ -20,7 +20,7 @@ int main()
     int usersel;         // the row selected by the user
     while (rowfull != 0) // you cannot add a new piece to a full row!
     {
-      usersel = scanf("Where would you like to place your game piece? [1-%i]", length(GBoard[0])); // input up until the last spot in the game board
+      usersel = scanf("Where would you like to place your game piece? [1-%i]", length(GBoard)); // input up until the last spot in the game board
       rowfull = checkrowfull(usersel);
     }
   }

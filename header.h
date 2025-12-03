@@ -5,7 +5,7 @@
 #define COLS 7
 
 typedef struct {
-    char cells[ROWS][COLS];  // ' ', 'X' oder 'O'
+    char cells[ROWS][COLS];  // ' 'leeres Feld, 'X' Spieler 1 oder 'O' Spieler 2
 } Board;
 
 void board_init(Board *b);

@@ -1,0 +1,10 @@
+eine header: Funktiondeklarationen
+    - board erstellen (nxm) 
+    - board print (ausgabe des Boards)
+    - board full/ draw
+    - check Win
+    - Spalteneingabe mit Zahlen (fürs erste)
+    - manage Players
+
+einne cdatei: Funktionen schreiben
+eine cdatei: play Game

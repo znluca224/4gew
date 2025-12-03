@@ -11,23 +11,23 @@ void clearBoard(int[][] GBoard) // creates the board and fills it with empty obj
   }
 }
 
-void printBoard(int[][] GBoard) // prints board onto console
+void printBoard(int[][] GBoard, char piece1, char piece2) // prints board onto console
 {
   for (int i = 0; i < length(GBoard); i++)
   {
     for (int j = 0; j < length(GBoard[0]); j++)
     {
-      if (GBoard[i][j] == 0)
+      if (GBoard[i][j] == 0) // empty cell
       {
         continue;
       }
-      else if (GBoard[i][j] == 1)
+      else if (GBoard[i][j] == 1) // piece of player one is there
       {
-        printf("%c", playerpiece1);
+        printf("%c", piece1);
       }
-      else if (GBoard[i][j] == 2)
+      else if (GBoard[i][j] == 2) // piece of player two is there
       {
-        printf("%c", playerpiece2);
+        printf("%c", piece2);
       }
       printf("|");
     }

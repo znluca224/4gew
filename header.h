@@ -5,7 +5,7 @@
 #define COLS 7
 
 // global variables for player pieces
-int playerpiece1 = 81; // Q
+int playerpiece1 = 79; // O
 int playerpiece2 = 88; // X
 
 typedef struct

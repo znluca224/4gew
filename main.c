@@ -3,8 +3,8 @@
 int main()
 {
     // size of board
-    int boredsizey = 6;
-    int boredsizex = 7;
+    int boredsizey = 6;                     // y-dimension of board
+    int boredsizex = 7;                     // x-dimension of board
     int maxplays = boredsizex * boredsizey; // maximum number of pieces on board
 
     // Create game board

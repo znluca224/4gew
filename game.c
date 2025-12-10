@@ -1,5 +1,5 @@
 #include "header.h"
-#include <ncurses.h>
+// #include <ncurses.h>
 
 int drop_piece(int GBoard[ROWS][COLS], int col, char piece) // col: 0-based, return is row or -1, if row is full
 {
@@ -29,11 +29,18 @@ int board_is_full(const Board *b)
     return 0;
 }
 
+<<<<<<< HEAD
+/*int board_check_win(int GBoard[ROWS][COLS], int n, char piece)                                   passes on board and position of playpiece on it, 1 = win
+{                                                                                                important note: The playpiece MUST be at the end of a connect four in order to fulfill the criterion!
+  int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; {x,y}; directions: right, left, down, up, right top, left top, right down, left down
+  n = 4;                                                                                         number of values to check; could be changed by function call in the future
+=======
 int board_check_win(int GBoard[ROWS][COLS], int n, int piece) // passes on board and position of playpiece on it, 1 = win
 {                                                             // important note: The playpiece MUST be at the end of a connect four in order to fulfill the criterion!
   int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
   //{x,y}; directions: right, left, down, up, right top, left top, right down, left down
   n = 4; // number of values to check; could be changed by function call in the future
+>>>>>>> 97b9625f3aab98e0fe4a0c53a4ceefded0cca5de
   for (int i = 0; i < ROWS; i++)
   {
     for (int j = 0; j < COLS; j++)
@@ -62,5 +69,10 @@ int board_check_win(int GBoard[ROWS][COLS], int n, int piece) // passes on board
       }
     }
   }
+<<<<<<< HEAD
+}
+*/
+=======
   return 0; // no four in a row were found anywhere
 }
+>>>>>>> 97b9625f3aab98e0fe4a0c53a4ceefded0cca5de

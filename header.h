@@ -18,10 +18,8 @@ typedef struct
     char cells[ROWS][COLS]; // ' 'leeres Feld, 'X' Spieler 1 oder 'O' Spieler 2
 } Board;
 
-void board_init(Board *b);
-void board_print(const Board *b);
-int board_drop_piece(Board *b, int col, char piece); // col: 0-basiert, Rückgabe: Zeile oder -1
-int board_is_full(const Board *b);
-int board_check_win(const Board *b, char piece); // 1 = gewonnen, 0 = noch nicht
+void clearBoard(int GBoard[ROWS][COLS]);
+void printBoard(int GBoard[ROWS][COLS]); // prints board onto console
+int drop_piece(int GBoard[ROWS][COLS], int col, char piece);
 
 #endif

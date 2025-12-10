@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #ifndef BOARD_H
 #define BOARD_H
 

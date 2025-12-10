@@ -20,7 +20,7 @@ typedef struct
     char cells[ROWS][COLS]; // ' 'leeres Feld, 'X' Spieler 1 oder 'O' Spieler 2
 } Board;
 
-void clearBoard(int GBoard[ROWS][COLS]);
+void clearBoard(*int[][]);
 void printBoard(int GBoard[ROWS][COLS]); // prints board onto console
 int drop_piece(int GBoard[ROWS][COLS], int col, char piece);
 

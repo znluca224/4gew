@@ -1,78 +1,75 @@
 #include "header.h"
-// #include <ncurses.h>
 
-int drop_piece(int GBoard[ROWS][COLS], int col, char piece) // col: 0-based, return is row or -1, if row is full
+static bool in_bounds(const Board *b, int r, int c)
 {
-  if (GBoard[ROWS][col] != 0)
-  {
-    return -1; // row is full, no piece can be put here
-  }
-  else
-  {
-    int curry = 0;                    // current spot is the very top one in the row
-    while (GBoard[curry++][col] == 0) // is the spot in the row below empty?????????
-    {
-      curry += curry; // current row goes one lower
-    }
-    GBoard[curry][col] = piece;
-    return curry;
-  }
+    return r >= 0 && r < b->rows && c >= 0 && c < b->cols;
 }
 
-int board_is_full(const Board *b)
+void game_init(Game *g)
 {
-  if (moves == ROWS * COLS)
-  {
-    return 1;
-  }
-  else
-    return 0;
+    board_init(&g->board);
+    g->current_player = CELL_P1;
+    g->game_over = false;
+    g->winner = CELL_EMPTY;
 }
 
-<<<<<<< HEAD
-/*int board_check_win(int GBoard[ROWS][COLS], int n, char piece)                                   passes on board and position of playpiece on it, 1 = win
-{                                                                                                important note: The playpiece MUST be at the end of a connect four in order to fulfill the criterion!
-  int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; {x,y}; directions: right, left, down, up, right top, left top, right down, left down
-  n = 4;                                                                                         number of values to check; could be changed by function call in the future
-=======
-int board_check_win(int GBoard[ROWS][COLS], int n, int piece) // passes on board and position of playpiece on it, 1 = win
-{                                                             // important note: The playpiece MUST be at the end of a connect four in order to fulfill the criterion!
-  int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-  //{x,y}; directions: right, left, down, up, right top, left top, right down, left down
-  n = 4; // number of values to check; could be changed by function call in the future
->>>>>>> 97b9625f3aab98e0fe4a0c53a4ceefded0cca5de
-  for (int i = 0; i < ROWS; i++)
-  {
-    for (int j = 0; j < COLS; j++)
+bool game_check_line(const Board *b, int r0, int c0, int dr, int dc, Cell player)
+{
+    int count = 0;
+    int r = r0, c = c0;
+
+    // Walk backward
+    while (in_bounds(b, r - dr, c - dc) && board_get(b, r - dr, c - dc) == player)
     {
-      if (GBoard[i][j] != piece)
-        continue; // skip cells that are not the playpiece
-
-      for (int k = 0; k < 8; k++)
-      {
-        int count = 1;
-        int initval = piece;
-        int x2 = i + directions[k][0];
-        int y2 = j + directions[k][1];
-
-        while (x2 >= 0 && x2 < ROWS && y2 >= 0 && y2 < COLS && GBoard[x2][y2] == initval)
-        {
-          count++;
-          x2 += directions[k][0];
-          y2 += directions[k][1];
-        }
-
-        if (count == n)
-        {
-          return 1;
-        }
-      }
+        r -= dr;
+        c -= dc;
     }
-  }
-<<<<<<< HEAD
+    // Walk forward and count
+    while (in_bounds(b, r, c) && board_get(b, r, c) == player)
+    {
+        count++;
+        r += dr;
+        c += dc;
+    }
+    return count >= 4;
 }
-*/
-=======
-  return 0; // no four in a row were found anywhere
+
+bool game_check_win(const Board *b, int last_row, int last_col, Cell player)
+{
+    if (player == CELL_EMPTY || last_row < 0 || last_col < 0)
+        return false;
+    return game_check_line(b, last_row, last_col, 0, 1, player) || // horizontal
+           game_check_line(b, last_row, last_col, 1, 0, player) || // vertical
+           game_check_line(b, last_row, last_col, 1, 1, player) || // diag down-right
+           game_check_line(b, last_row, last_col, 1, -1, player);  // diag down-left
 }
->>>>>>> 97b9625f3aab98e0fe4a0c53a4ceefded0cca5de
+
+bool game_check_draw(const Board *b)
+{
+    return board_is_full(b);
+}
+
+bool game_make_move(Game *g, int col)
+{
+    if (g->game_over)
+        return false;
+    int row = board_drop(&g->board, col, g->current_player);
+    if (row < 0)
+        return false;
+
+    if (game_check_win(&g->board, row, col, g->current_player))
+    {
+        g->game_over = true;
+        g->winner = g->current_player;
+    }
+    else if (game_check_draw(&g->board))
+    {
+        g->game_over = true;
+        g->winner = CELL_EMPTY;
+    }
+    else
+    {
+        g->current_player = (g->current_player == CELL_P1) ? CELL_P2 : CELL_P1;
+    }
+    return true;
+}

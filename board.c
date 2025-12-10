@@ -1,36 +1,65 @@
 #include "header.h"
+#include <string.h>
 
-void clearBoard(int GBoard[ROWS][COLS])
-{                                          // array MUST be passed as pointer
-  for (int i = 0; i < length(GBoard); i++) // rows
-  {
-    for (int j = 0; j < length(GBoard[0]); j++) // columns
+void board_init(Board *b)
+{
+    b->rows = BOARD_ROWS;
+    b->cols = BOARD_COLS;
+    for (int r = 0; r < BOARD_ROWS; ++r)
     {
-      GBoard[i][j] = 0;
+        for (int c = 0; c < BOARD_COLS; ++c)
+        {
+            b->cells[r][c] = CELL_EMPTY;
+        }
     }
-  }
 }
 
-void printBoard(int GBoard[ROWS][COLS]) // prints board onto console
+void board_clear(Board *b)
 {
-  for (int i = 0; i < ROWS; i++)
-  {
-    for (int j = 0; j < COLS; j++)
+    for (int r = 0; r < b->rows; ++r)
     {
-      if (GBoard[i][j] == 0) // leeres Feld
-      {
-        continue;
-      }
-      else if (GBoard[i][j] == 1) // playpiece of Player 2 at this position
-      {
-        printf("%c", playerpiece1);
-      }
-      else if (GBoard[i][j] == 2) // playpiece of Player 2 at this position
-      {
-        printf("%c", playerpiece2);
-      }
-      printf("|"); // spacer between the individual playpieces
+        for (int c = 0; c < b->cols; ++c)
+        {
+            b->cells[r][c] = CELL_EMPTY;
+        }
     }
-    printf("\n------------------------------------------------\n"); // prints new line, filled with dashes, after the previous line has finished printing
-  }
+}
+
+bool board_is_full(const Board *b)
+{
+    for (int c = 0; c < b->cols; ++c)
+    {
+        if (b->cells[0][c] == CELL_EMPTY)
+            return false;
+    }
+    return true;
+}
+
+bool board_can_drop(const Board *b, int col)
+{
+    if (col < 0 || col >= b->cols)
+        return false;
+    return b->cells[0][col] == CELL_EMPTY;
+}
+
+int board_drop(Board *b, int col, Cell player)
+{
+    if (!board_can_drop(b, col))
+        return -1;
+    for (int r = b->rows - 1; r >= 0; --r)
+    {
+        if (b->cells[r][col] == CELL_EMPTY)
+        {
+            b->cells[r][col] = player;
+            return r;
+        }
+    }
+    return -1;
+}
+
+Cell board_get(const Board *b, int row, int col)
+{
+    if (row < 0 || row >= b->rows || col < 0 || col >= b->cols)
+        return CELL_EMPTY;
+    return b->cells[row][col];
 }

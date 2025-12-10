@@ -128,39 +128,44 @@ int main(void)
   return EXIT_SUCCESS;
 }*/
 
-#define ROWS 5
-#define COLS 5
+#define ROWS 6
+#define COLS 7
 #define N 4
 
-int check_concurrent_cells(int GBoard[ROWS][COLS], int x, int y)
-{
+int check_concurrent_cells(int GBoard[ROWS][COLS], int n, int piece) // passes on board and position of playpiece on it, 1 = win
+{                                                                    // important note: The playpiece MUST be at the end of a connect four in order to fulfill the criterion!
   int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-  // right, left, down, up, right top, left top, right down, left down
-  int n = 4; // number of values to check
-  if (x < 0 || x >= ROWS || y < 0 || y >= COLS)
+  //{x,y}; directions: right, left, down, up, right top, left top, right down, left down
+  n = 4; // number of values to check; could be changed by function call in the future
+  for (int i = 0; i < ROWS; i++)
   {
-    return 0; // invalid coordinates, should never trigger
-  }
-
-  for (int k = 0; k < 8; k++)
-  {
-    int count = 1;
-    int initval = GBoard[x][y];
-    int x2 = x + directions[k][0];
-    int y2 = y + directions[k][1];
-
-    while (x2 >= 0 && x2 < ROWS && y2 >= 0 && y2 < COLS && GBoard[x2][y2] == initval)
+    for (int j = 0; j < COLS; j++)
     {
-      count++;
-      x2 += directions[k][0];
-      y2 += directions[k][1];
-    }
+      if (GBoard[i][j] != piece)
+        continue; // skip cells that are not the playpiece
 
-    if (count == n)
-    {
-      return 1;
+      for (int k = 0; k < 8; k++)
+      {
+        int count = 1;
+        int initval = piece;
+        int x2 = i + directions[k][0];
+        int y2 = j + directions[k][1];
+
+        while (x2 >= 0 && x2 < ROWS && y2 >= 0 && y2 < COLS && GBoard[x2][y2] == initval)
+        {
+          count++;
+          x2 += directions[k][0];
+          y2 += directions[k][1];
+        }
+
+        if (count == n)
+        {
+          return 1;
+        }
+      }
     }
   }
+  return 0; // no four in a row were found anywhere
 }
 
 /*
@@ -230,13 +235,14 @@ int board_check_win(int GBoard[ROWS][COLS], int x, int y) // 1 = win
 int main()
 {
   int GBoard[ROWS][COLS] = {
-      {1, 0, 0, 1, 1},
-      {0, 0, 1, 1, 1},
-      {1, 1, 1, 1, 1},
-      {0, 0, 1, 0, 0},
-      {1, 1, 1, 0, 0}};
+      {1, 1, 1, 0, 1, 0, 0},
+      {1, 0, 1, 1, 1, 0, 1},
+      {1, 1, 0, 0, 1, 1, 0},
+      {1, 0, 1, 0, 1, 1, 1},
+      {0, 0, 1, 0, 0, 0, 1},
+      {1, 0, 1, 1, 0, 1, 0}};
 
-  int ret1 = check_concurrent_cells(GBoard, 3, 2);
+  int ret1 = check_concurrent_cells(*GBoard, 3, 1);
   printf("\n%i\n", ret1);
 
   // int ret = board_check_win(GBoard, 3, 2);

@@ -13,9 +13,9 @@ void clearBoard(int GBoard[ROWS][COLS])
 
 void printBoard(int GBoard[ROWS][COLS]) // prints board onto console
 {
-  for (int i = 0; i < length(GBoard); i++)
+  for (int i = 0; i < ROWS; i++)
   {
-    for (int j = 0; j < length(GBoard[0]); j++)
+    for (int j = 0; j < COLS; j++)
     {
       if (GBoard[i][j] == 0) // leeres Feld
       {

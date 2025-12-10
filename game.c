@@ -1,42 +1,63 @@
 #include "header.h"
-#include <stdbool.h>
 #include <ncurses.h>
 
-int drop_piece(Board *b, int col, char piece) // col: 0-basiert, Rückgabe: Zeile oder -1
+int drop_piece(int GBoard[ROWS][COLS], int col, char piece) // col: 0-based, return is row or -1, if row is full
 {
+  if (GBoard[ROWS][col] != 0)
+  {
+    return -1; // row is full, no piece can be put here
+  }
+  else
+  {
+    int curry = 0;                    // current spot is the very top one in the row
+    while (GBoard[curry++][col] == 0) // is the spot in the row below empty?????????
+    {
+      curry += curry; // current row goes one lower
+    }
+    GBoard[curry][col] = piece;
+    return curry;
+  }
 }
+
 int board_is_full(const Board *b)
 {
-}
-int board_check_win(int GBoard[ROWS][COLS], int x, int y) // 1 = win
-{                                                         // passes on board and position of playpiece on it
-  int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
-  // right, left, down, up, right top, left top, right down, left down
-  int n = 4; // number of values to check
-  if (x < 0 || x >= ROWS || y < 0 || y >= COLS)
+  if (moves == ROWS * COLS)
   {
-    return 0; // invalid coordinates, should never trigger
+    return 1;
   }
+  else
+    return 0;
+}
 
-  for (int k = 0; k < 8; k++)
+int board_check_win(int GBoard[ROWS][COLS], int n, char piece)                                  // passes on board and position of playpiece on it, 1 = win
+{                                                                                               // important note: The playpiece MUST be at the end of a connect four in order to fulfill the criterion!
+  int directions[][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; //{x,y}; directions: right, left, down, up, right top, left top, right down, left down
+  n = 4;                                                                                        // number of values to check; could be changed by function call in the future
+  for (int i = 0; i < ROWS; i++)
   {
-    int count = 1;
-    int initval = GBoard[x][y];
-    int x2 = x + directions[k][0];
-    int y2 = y + directions[k][1];
-
-    while (x2 >= 0 && x2 < ROWS && y2 >= 0 && y2 < COLS && GBoard[x2][y2] == initval)
+    for (int j = 0; j < COLS; j++)
     {
-      count++;
-      x2 += directions[k][0];
-      y2 += directions[k][1];
-    }
+      for (int k = 0; k < 8; k++)
+      {
+        int count = 1;
+        int initval = piece; // value of playpiece at starting spot
+        int x2 = i + directions[k][0];
+        int y2 = j + directions[k][1];
 
-    if (count == n)
-    {
-      return 1;
+        while (x2 >= 0 && x2 < ROWS && y2 >= 0 && y2 < COLS && GBoard[x2][y2] == initval)
+        {
+          count++;
+          x2 += directions[k][0];
+          y2 += directions[k][1];
+        }
+
+        if (count == n)
+        {
+          return 1; // four in a row were found
+        }
+        else
+          return 0; // no four in a row were found anywhere, bummer
+      }
     }
-    else
-      return 0;
   }
 }

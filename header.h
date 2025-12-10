@@ -4,9 +4,12 @@
 #define ROWS 6
 #define COLS 7
 
-// global variables for player pieces
+// global variables
+// player pieces
 int playerpiece1 = 79; // O
 int playerpiece2 = 88; // X
+// other
+int moves = 0; // moves made (pices put onto board)
 
 typedef struct
 {

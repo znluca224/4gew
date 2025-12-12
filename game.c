@@ -1,75 +1,105 @@
-#include "header.h"
+// # include <stdio.h>
+#include "game.h"
 
-static bool in_bounds(const Board *b, int r, int c)
+// Setup of GBoard
+void setupBoard(int gameBoard[ROWS][COLUMNS])
 {
-    return r >= 0 && r < b->rows && c >= 0 && c < b->cols;
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLUMNS; j++)
+        {
+            gameBoard[i][j] = 0; // fills every spot with zeros
+        }
+    }
 }
 
-void game_init(Game *g)
+int dropAPiece(int gameBoard[ROWS][COLUMNS], int chosenColumn, int player)
 {
-    board_init(&g->board);
-    g->current_player = CELL_P1;
-    g->game_over = false;
-    g->winner = CELL_EMPTY;
+    // if the selected row is <0 or >Columns, the function stops
+    if (0 > chosenColumn || chosenColumn >= COLUMNS)
+    {
+        return 0;
+    }
+
+    for (int rowToBeChecked = ROWS - 1; rowToBeChecked >= 0; --rowToBeChecked)
+    {
+        // putting the piece onto the lowest possible row
+        if (gameBoard[rowToBeChecked][chosenColumn] == 0)
+        {
+            gameBoard[rowToBeChecked][chosenColumn] = player;
+            return 1;
+        }
+    }
+    return 0;
 }
 
-bool game_check_line(const Board *b, int r0, int c0, int dr, int dc, Cell player)
+int checkVictory(int gameBoard[ROWS][COLUMNS], int player)
 {
-    int count = 0;
-    int r = r0, c = c0;
+    // directions
+    // 1. vertical
+    // 2. horizontal
+    // 3. diagonal from top right to bottom left
+    // 4. diagonal from bottom right to top left
 
-    // Walk backward
-    while (in_bounds(b, r - dr, c - dc) && board_get(b, r - dr, c - dc) == player)
+    // 1. vertical
+    for (int c = 0; c < COLUMNS; c++)
     {
-        r -= dr;
-        c -= dc;
+        for (int r = 0; r <= ROWS - 4; r++)
+        {
+            if ((gameBoard[r][c] == player) && (gameBoard[r + 1][c] == player) && (gameBoard[r + 2][c] == player) && (gameBoard[r + 3][c] == player))
+            {
+                return 1;
+            }
+        }
     }
-    // Walk forward and count
-    while (in_bounds(b, r, c) && board_get(b, r, c) == player)
+
+    // 2. horizontal
+    for (int r = 0; r < ROWS; r++)
     {
-        count++;
-        r += dr;
-        c += dc;
+        for (int c = 0; c <= COLUMNS - 4; c++)
+        {
+            if ((gameBoard[r][c] == player) && (gameBoard[r][c + 1] == player) && (gameBoard[r][c + 2] == player) && (gameBoard[r][c + 3] == player))
+            {
+                return 1;
+            }
+        }
     }
-    return count >= 4;
+
+    // 3. diagonal from top right to bottom left
+    for (int r = 0; r <= ROWS - 4; r++)
+    {
+        for (int c = 0; c <= COLUMNS - 4; c++)
+        {
+            if ((gameBoard[r][c] == player) && (gameBoard[r + 1][c + 1] == player) && (gameBoard[r + 2][c + 2] == player) && (gameBoard[r + 3][c + 3] == player))
+            {
+                return 1;
+            }
+        }
+    }
+
+    // 4. diagonal from bottom right to top left
+    for (int r = 3; r < ROWS; r++)
+    {
+        for (int c = 0; c <= COLUMNS - 4; c++)
+        {
+            if ((gameBoard[r][c] == player) && (gameBoard[r - 1][c + 1] == player) && (gameBoard[r - 2][c + 2] == player) && (gameBoard[r - 3][c + 3] == player))
+            {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 
-bool game_check_win(const Board *b, int last_row, int last_col, Cell player)
+// is the board full?
+int checkBoard(int gameBoard[ROWS][COLUMNS])
 {
-    if (player == CELL_EMPTY || last_row < 0 || last_col < 0)
-        return false;
-    return game_check_line(b, last_row, last_col, 0, 1, player) || // horizontal
-           game_check_line(b, last_row, last_col, 1, 0, player) || // vertical
-           game_check_line(b, last_row, last_col, 1, 1, player) || // diag down-right
-           game_check_line(b, last_row, last_col, 1, -1, player);  // diag down-left
-}
-
-bool game_check_draw(const Board *b)
-{
-    return board_is_full(b);
-}
-
-bool game_make_move(Game *g, int col)
-{
-    if (g->game_over)
-        return false;
-    int row = board_drop(&g->board, col, g->current_player);
-    if (row < 0)
-        return false;
-
-    if (game_check_win(&g->board, row, col, g->current_player))
+    for (int c = 0; c < COLUMNS; c++)
     {
-        g->game_over = true;
-        g->winner = g->current_player;
+        if (gameBoard[0][c] == 0)
+        {
+            return 0;
+        }
     }
-    else if (game_check_draw(&g->board))
-    {
-        g->game_over = true;
-        g->winner = CELL_EMPTY;
-    }
-    else
-    {
-        g->current_player = (g->current_player == CELL_P1) ? CELL_P2 : CELL_P1;
-    }
-    return true;
+    return 1;
 }

@@ -1,61 +1,81 @@
-#include "header.h"
-#include <ncurses.h>
+#include <stdio.h>
+#include "game.h"
+// #include "printboard.h"
 
 int main(void)
 {
-    Game game;
-    game_init(&game);
+    // this is the game board
+    int gameBoard[ROWS][COLUMNS];
 
-    ui_init();
+    int currentPlayer = 1;
 
-    int cursor_col = 0;
+    int chosenColumn;
+
+    int winner = 0; // neither player is number 0 -> no winner
+
+    setupBoard(gameBoard);
 
     while (1)
-    {
-        ui_draw(&game, cursor_col);
-        int ch = ui_get_input();
+    { // while true
+        printBoard(gameBoard);
 
-        if (ch == 'q' || ch == 'Q')
+        // Current player
+        printf("Spieler %d ist am Zug.\n", currentPlayer);
+
+        // where does the player want their playpiece
+        printf("Bitte Spalte wählen (1-%d): ", COLUMNS);
+
+        // If the chosen column is not empty, a value of one will be returned
+
+        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------
+        if (scanf("%d", &chosenColumn) != 1)
         {
-            break;
+            // kann man das vereinfachen?
+            //---------------------------------------------------------------------------------------
+            //---------------------------------------------------------------------------------------
+            printf("Ungueltige Eingabe. Programm wird beendet.\n");
+            return 0;
         }
-        if (game.game_over)
+
+        // decrementing row number to account for difference in human and computer counting
+        chosenColumn -= 1;
+
+        // no piece placed
+        if (!dropAPiece(gameBoard, chosenColumn, currentPlayer))
         {
-            if (ch == 'r' || ch == 'R')
-            {
-                game_init(&game);
-                cursor_col = 0;
-            }
+            printf("Ungueltiger Zug! Spalte existiert nicht oder ist voll.\n");
             continue;
         }
 
-        switch (ch)
+        // Four pieces in a row -> current player has won and game is stopped
+        if (checkVictory(gameBoard, currentPlayer))
         {
-        case KEY_LEFT:
-        case 'a':
-        case 'A':
-            if (cursor_col > 0)
-                cursor_col--;
-            break;
-        case KEY_RIGHT:
-        case 'd':
-        case 'D':
-            if (cursor_col < BOARD_COLS - 1)
-                cursor_col++;
-            break;
-        case '\n':
-        case KEY_ENTER:
-        case ' ':
-            if (board_can_drop(&game.board, cursor_col))
-            {
-                game_make_move(&game, cursor_col);
-            }
-            break;
-        default:
+            winner = currentPlayer;
             break;
         }
+
+        // full board stops game
+        if (checkBoard(gameBoard))
+        {
+            break;
+        }
+
+        // Switch between players: 3-1 --> player 2.  --> 3-2 --> player 1
+        currentPlayer = 3 - currentPlayer;
     }
 
-    ui_shutdown();
+    printBoard(gameBoard);
+
+    // if there is a winner, they will be pronounced so
+    if (winner != 0)
+    {
+        printf("Spieler %d hat gewonnen! Herzlichen Glühstrumpf!\n", winner);
+    }
+    else // draw
+    {
+        printf("Unentschieden! Das Brett ist voll.\n");
+    }
+
     return 0;
 }

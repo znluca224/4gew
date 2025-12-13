@@ -18,6 +18,12 @@ int checkVictory(int board[ROWS][COLUMNS], int player);
 // Board überprüfen: ist das Board voll?
 int checkBoard(int board[ROWS][COLUMNS]);
 
+int playOneRound(void);
+
+void clearTerminal();
+
+void printLogo();
+
 // 
 void printBoard(int board[ROWS][COLUMNS]);
 

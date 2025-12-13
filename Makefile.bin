@@ -1,0 +1,24 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11 -g
+
+OBJS = main.o game.o printboard.o
+TEST_OBJS = tests.o game.o
+
+all: vier_gewinnt
+
+vier_gewinnt: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+tests: test_runner
+
+test_runner: $(TEST_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+run_tests: test_runner
+	./test_runner
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
+clean:
+	rm -f *.o vier_gewinnt test_runner
